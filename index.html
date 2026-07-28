@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نتيجة الثانوية العامة — بحث فوري بالاسم أو رقم الجلوس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M4 11v5c0 1.5 3.5 3 8 3s8-1.5 8-3v-5"/></svg></div>
+      <span>نتيجتي</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#search-card">البحث عن النتيجة</a></li>
+      <li><a href="#how">طريقة الاستخدام</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="emblem">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M4 11v5c0 1.5 3.5 3 8 3s8-1.5 8-3v-5"/></svg>
+  </div>
+  <h1>نتيجة الثانوية العامة</h1>
+  <p>اكتب الاسم كامل أو رقم الجلوس وشوف نتيجتك على طول</p>
+</header>
+
+<main>
+  <div class="card" id="status-card">
+    <div class="status-loading" id="status-loading">
+      <div class="spinner"></div>
+      <span>جاري تحميل بيانات النتيجة…</span>
+    </div>
+  </div>
+
+  <div class="card" id="search-card" style="display:none;">
+    <div class="search-wrap">
+      <input type="text" id="search-input" placeholder="اكتب الاسم كامل أو رقم الجلوس…" disabled autocomplete="off">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </div>
+    <div class="search-hint">النتيجة تظهر تلقائيًا فور الكتابة، دون أي زر بحث.</div>
+  </div>
+</main>
+
+<div id="results"></div>
+
+<section class="about" id="how">
+  <h2>طريقة الاستخدام</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="num">١</div>
+      <h3>افتح الصفحة</h3>
+      <p>بيانات النتيجة محمّلة مسبقًا على الموقع، مفيش أي رفع ملفات مطلوب منك.</p>
+    </div>
+    <div class="step">
+      <div class="num">٢</div>
+      <h3>اكتب بياناتك</h3>
+      <p>اكتب الاسم رباعيًا كما هو مسجل، أو رقم الجلوس.</p>
+    </div>
+    <div class="step">
+      <div class="num">٣</div>
+      <h3>استقبل النتيجة</h3>
+      <p>تظهر النتيجة فورًا في بطاقة واضحة بكل التفاصيل.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="privacy">البحث يتم بالكامل داخل المتصفح بعد تحميل بيانات النتيجة من الموقع.</div>
+  <div>نتيجتي © 2026</div>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
