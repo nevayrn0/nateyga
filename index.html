@@ -1,82 +1,557 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نتيجة الثانوية العامة — بحث فوري بالاسم أو رقم الجلوس</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<title>مشروع الريلز | ديوان التاريخ</title>
+<style>
+:root{
+--bg:#101214;--panel:#1b2023;--panel2:#252b2e;
+--gold:#d5b477;--text:#f4f0e8;--muted:#b9b9b3;
+--line:#394044;--green:#9bc8a2;--red:#df9990;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+background:var(--bg);color:var(--text);
+font-family:Tahoma,Arial,sans-serif;line-height:1.9
+}
+.container{width:min(1120px,92%);margin:auto}
+header{
+padding:85px 0 65px;
+background:linear-gradient(100deg,#111315eF,#241f17dd),
+radial-gradient(circle at 80% 20%,#88683a,transparent 50%);
+border-bottom:1px solid var(--line)
+}
+.kicker{color:var(--gold);letter-spacing:3px;font-size:13px}
+h1{font-size:clamp(35px,6vw,65px);line-height:1.3;margin:20px 0}
+header p{color:var(--muted);max-width:750px;font-size:17px}
+nav{
+position:sticky;top:0;z-index:10;
+background:#171a1def;border-bottom:1px solid var(--line);
+backdrop-filter:blur(12px)
+}
+nav .container{display:flex;gap:20px;overflow-x:auto;padding:12px 0}
+nav a{white-space:nowrap;color:var(--muted);font-size:13px}
+nav a:hover{color:var(--gold)}
+section{padding:55px 0;border-bottom:1px solid var(--line)}
+h2{font-size:28px;color:var(--gold);margin-bottom:22px}
+h3{font-size:20px;margin-bottom:10px}
+p{color:var(--muted);margin:8px 0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:17px}
+.grid.three{grid-template-columns:repeat(3,1fr)}
+.card{
+background:linear-gradient(145deg,var(--panel2),var(--panel));
+border:1px solid var(--line);border-radius:16px;padding:22px
+}
+.card h3{color:var(--text)}
+.tag{
+display:inline-block;border:1px solid #66543a;color:var(--gold);
+border-radius:30px;padding:2px 12px;font-size:12px;margin-bottom:10px
+}
+ul,ol{padding-right:22px;color:var(--muted);margin:10px 0}
+li{margin:5px 0}
+.highlight{
+background:#28241d;border-right:4px solid var(--gold);
+padding:20px;border-radius:12px;margin:15px 0
+}
+.script{
+background:#171a1c;border:1px solid var(--line);
+border-radius:14px;padding:22px;margin:15px 0
+}
+.script .time{color:var(--gold);font-size:13px;font-weight:bold}
+.script p{color:var(--text)}
+.small{font-size:13px;color:var(--muted)}
+.badge{color:var(--green);font-size:13px}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{text-align:right;padding:13px;border-bottom:1px solid var(--line)}
+th{background:#30291f;color:var(--gold)}
+td{color:var(--muted);font-size:14px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+.steps{counter-reset:step}
+.steps li{margin:13px 0}
+footer{text-align:center;padding:35px;color:var(--muted);font-size:13px}
+@media(max-width:750px){
+.grid,.grid.three{grid-template-columns:1fr}
+header{padding:55px 0}
+h2{font-size:24px}
+}
+@media print{
+nav{display:none}
+body{background:white;color:#111}
+.card,.script,.highlight{background:white;color:#111;border-color:#aaa}
+p,li,td{color:#333}
+h2,.time{color:#76531e}
+}
+</style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <div class="brand">
-      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M4 11v5c0 1.5 3.5 3 8 3s8-1.5 8-3v-5"/></svg></div>
-      <span>نتيجتي</span>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#search-card">البحث عن النتيجة</a></li>
-      <li><a href="#how">طريقة الاستخدام</a></li>
-    </ul>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="emblem">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M4 11v5c0 1.5 3.5 3 8 3s8-1.5 8-3v-5"/></svg>
-  </div>
-  <h1>نتيجة الثانوية العامة</h1>
-  <p>اكتب الاسم كامل أو رقم الجلوس وشوف نتيجتك على طول</p>
+<header>
+<div class="container">
+<div class="kicker">DIWAN AL TAREEKH · CONTENT PROJECT</div>
+<h1>حكايات التاريخ<br>بطريقة مختلفة</h1>
+<p>
+مشروع تطوير محتوى الريلز لصفحة ديوان التاريخ.
+رؤية متكاملة لتحويل المعلومات التاريخية والأثرية إلى حكايات قصيرة
+تجمع بين التشويق والبحث العلمي والتقديم البصري.
+</p>
+</div>
 </header>
 
-<main>
-  <div class="card" id="status-card">
-    <div class="status-loading" id="status-loading">
-      <div class="spinner"></div>
-      <span>جاري تحميل بيانات النتيجة…</span>
-    </div>
-  </div>
+<nav>
+<div class="container">
+<a href="#vision">الرؤية</a>
+<a href="#identity">الهوية</a>
+<a href="#truth">حقيقة ولا أسطورة</a>
+<a href="#people">شخصيات صنعت التاريخ</a>
+<a href="#research">التوثيق</a>
+<a href="#production">الإنتاج</a>
+<a href="#software">البرامج</a>
+<a href="#publishing">النشر</a>
+</div>
+</nav>
 
-  <div class="card" id="search-card" style="display:none;">
-    <div class="search-wrap">
-      <input type="text" id="search-input" placeholder="اكتب الاسم كامل أو رقم الجلوس…" disabled autocomplete="off">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    </div>
-    <div class="search-hint">النتيجة تظهر تلقائيًا فور الكتابة، دون أي زر بحث.</div>
-  </div>
-</main>
+<main class="container">
 
-<div id="results"></div>
+<section id="vision">
+<h2>01 | فكرة المشروع</h2>
+<p>
+إطلاق أسلوب جديد لتقديم التاريخ على صفحة ديوان التاريخ من خلال
+ريلز قصيرة، يظهر فيها مقدم المحتوى أمام الكاميرا، ويستعين بالصور
+الأثرية والخرائط واللقطات التوضيحية لشرح الأحداث والشخصيات.
+</p>
 
-<section class="about" id="how">
-  <h2>طريقة الاستخدام</h2>
-  <div class="steps">
-    <div class="step">
-      <div class="num">١</div>
-      <h3>افتح الصفحة</h3>
-      <p>بيانات النتيجة محمّلة مسبقًا على الموقع، مفيش أي رفع ملفات مطلوب منك.</p>
-    </div>
-    <div class="step">
-      <div class="num">٢</div>
-      <h3>اكتب بياناتك</h3>
-      <p>اكتب الاسم رباعيًا كما هو مسجل، أو رقم الجلوس.</p>
-    </div>
-    <div class="step">
-      <div class="num">٣</div>
-      <h3>استقبل النتيجة</h3>
-      <p>تظهر النتيجة فورًا في بطاقة واضحة بكل التفاصيل.</p>
-    </div>
-  </div>
+<div class="grid">
+<div class="card">
+<h3>الهدف المعرفي</h3>
+<p>تقديم معلومات صحيحة ومبسطة، وتشجيع الجمهور على البحث والقراءة وزيارة المواقع الأثرية.</p>
+</div>
+<div class="card">
+<h3>الهدف الإعلامي</h3>
+<p>بناء هوية مرئية مميزة للصفحة وزيادة الوصول والتفاعل والمشاركة.</p>
+</div>
+<div class="card">
+<h3>الجمهور المستهدف</h3>
+<p>الشباب، الجمهور العام، المهتمون بالتاريخ والآثار، وطلاب الجامعات.</p>
+</div>
+<div class="card">
+<h3>شكل المحتوى</h3>
+<p>ريلز من 40 إلى 60 ثانية، باللغة العامية المصرية، بأسلوب وثائقي مشوق.</p>
+</div>
+</div>
+
+<div class="highlight">
+<strong>الفكرة الرئيسية:</strong>
+حكاية تشد الانتباه، معلومة تستحق المعرفة، ومصدر يثبت صحتها.
+</div>
 </section>
 
+<section id="identity">
+<h2>02 | الهوية التحريرية والبصرية</h2>
+<div class="grid">
+<div class="card">
+<h3>الشخصية الإعلامية</h3>
+<ul>
+<li>راوي للحكاية التاريخية.</li>
+<li>باحث يشرح المعلومة.</li>
+<li>مقدم يطرح الأسئلة على الجمهور.</li>
+<li>شخصية فضولية لا تدعي امتلاك كل الإجابات.</li>
+</ul>
+</div>
+<div class="card">
+<h3>نبرة التقديم</h3>
+<ul>
+<li>تشويق وغموض عند ملاءمة الموضوع.</li>
+<li>لغة مصرية بسيطة ومفهومة.</li>
+<li>جدية عند عرض الأدلة والمعلومات.</li>
+<li>عدم استخدام الإثارة المضللة.</li>
+</ul>
+</div>
+<div class="card">
+<h3>الشكل البصري</h3>
+<ul>
+<li>تصوير رأسي 9:16.</li>
+<li>ظهور المقدم في الكادر.</li>
+<li>لقطات أثرية وصور تاريخية.</li>
+<li>خرائط ورسومات توضيحية.</li>
+<li>ألوان متناسقة مع هوية الصفحة.</li>
+</ul>
+</div>
+<div class="card">
+<h3>الهوية الصوتية</h3>
+<ul>
+<li>صوت واضح ومباشر.</li>
+<li>موسيقى وثائقية هادئة.</li>
+<li>مؤثرات صوتية في اللحظات المهمة.</li>
+<li>عدم جعل الموسيقى أعلى من الكلام.</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section id="truth">
+<h2>03 | السلسلة الأولى: حقيقة ولا أسطورة؟</h2>
+<span class="tag">FACT OR MYTH</span>
+<p>
+سلسلة تعتمد على طرح رواية أو معلومة منتشرة عن التاريخ أو الآثار،
+ثم اختبارها في ضوء المصادر والأدلة العلمية.
+</p>
+
+<div class="grid">
+<div class="card">
+<h3>هدف السلسلة</h3>
+<ul>
+<li>تصحيح المعلومات التاريخية الشائعة.</li>
+<li>كشف الفرق بين الحقيقة والرواية الشعبية.</li>
+<li>توضيح ما نعرفه وما لا نعرفه.</li>
+<li>تعريف الجمهور بطريقة التفكير الأثري والتاريخي.</li>
+</ul>
+</div>
+<div class="card">
+<h3>أنواع الموضوعات</h3>
+<ul>
+<li>الأساطير المرتبطة بالفراعنة.</li>
+<li>الروايات حول المقابر والآثار.</li>
+<li>قصص الملوك والشخصيات.</li>
+<li>الادعاءات المنتشرة على الإنترنت.</li>
+<li>النظريات العلمية المختلف عليها.</li>
+</ul>
+</div>
+</div>
+
+<h3 style="margin-top:28px">نموذج ريل افتتاحي: هل كل ما نسمعه عن الفراعنة حقيقة؟</h3>
+
+<div class="script">
+<div class="time">00–05 ثانية | Hook</div>
+<p>«عمرك سمعت معلومة تاريخية وصدقتها لمجرد إن ناس كتير بتكررها؟ طب هل فكرت إذا كانت حقيقية أصلًا؟»</p>
+<div class="time">05–15 ثانية | بناء الفضول</div>
+<p>«التاريخ مليان حكايات اتنقلت من جيل لجيل، ومع الوقت بقت عند ناس كتير حقائق ثابتة.»</p>
+<div class="time">15–35 ثانية | الفكرة الأساسية</div>
+<p>«لكن المؤرخ وعالم الآثار مش بيكتفوا بالرواية. بيدوروا على الدليل: نصوص، نقوش، آثار، وسياق تاريخي. وأحيانًا الدليل يؤكد الرواية، وأحيانًا يصححها، وأحيانًا يسيب السؤال مفتوح.»</p>
+<div class="time">35–48 ثانية | الرسالة</div>
+<p>«ومن هنا هنبدأ سلسلة حقيقة ولا أسطورة، نفحص فيها أشهر الحكايات، ونفرق بين المعلومة المؤكدة والنظرية والرواية.»</p>
+<div class="time">48–55 ثانية | CTA</div>
+<p>«اكتبلي في التعليقات: إيه أكتر معلومة تاريخية نفسك تعرف إذا كانت حقيقة ولا أسطورة؟»</p>
+</div>
+
+<h3>أفكار حلقات مستقبلية</h3>
+<div class="grid">
+<div class="card"><h3>لعنة الفراعنة</h3><p>ما الذي حدث فعلًا بعد اكتشاف مقبرة توت عنخ آمون؟ وما علاقة الصحافة بالرواية؟</p></div>
+<div class="card"><h3>الأهرامات</h3><p>ما الأدلة الأثرية التي تفسر بناء الأهرامات؟ وما الادعاءات التي لا يدعمها الدليل؟</p></div>
+<div class="card"><h3>المومياوات</h3><p>هل كان التحنيط طريقة واحدة ثابتة أم تطورت ممارساته عبر العصور؟</p></div>
+<div class="card"><h3>الأساطير القديمة</h3><p>كيف نميز بين النص الديني القديم والحدث التاريخي؟</p></div>
+</div>
+</section>
+
+<section id="people">
+<h2>04 | السلسلة الثانية: شخصيات صنعت التاريخ</h2>
+<span class="tag">HISTORY MAKERS</span>
+<p>
+سلسلة تقدم الشخصيات التاريخية من خلال قصة قصيرة تركز على
+نشأتها، وأهم تحول في حياتها، وإنجازاتها، وتأثيرها في التاريخ.
+</p>
+
+<div class="grid">
+<div class="card">
+<h3>هدف السلسلة</h3>
+<ul>
+<li>تقديم الشخصيات بصورة إنسانية.</li>
+<li>توضيح الظروف التي صنعت قراراتها.</li>
+<li>تجنب تحويل الشخصيات إلى أبطال مثاليين.</li>
+<li>عرض الإنجازات والأخطاء والجدل التاريخي.</li>
+</ul>
+</div>
+<div class="card">
+<h3>تنوع الشخصيات</h3>
+<ul>
+<li>ملوك وملكات.</li>
+<li>قادة عسكريون.</li>
+<li>علماء ومفكرون.</li>
+<li>شخصيات أثرية ودينية.</li>
+<li>شخصيات غيرت مجرى الأحداث.</li>
+</ul>
+</div>
+</div>
+
+<h3 style="margin-top:28px">نموذج ريل: توت عنخ آمون.. الملك الذي عرفه العالم بعد موته</h3>
+
+<div class="script">
+<div class="time">00–05 ثانية | Hook</div>
+<p>«إزاي ملك حكم مصر وهو طفل، وبعد آلاف السنين بقى واحد من أشهر ملوك العالم؟»</p>
+<div class="time">05–15 ثانية | البداية</div>
+<p>«توت عنخ آمون تولى الحكم في سن صغيرة، خلال فترة سياسية ودينية مهمة من تاريخ مصر القديمة.»</p>
+<div class="time">15–30 ثانية | الحكاية</div>
+<p>«حكم في أواخر الأسرة الثامنة عشرة، وارتبط عهده بالعودة إلى عبادة آمون بعد التحولات الدينية التي شهدتها البلاد في عصر أخناتون.»</p>
+<div class="time">30–43 ثانية | نقطة التحول</div>
+<p>«لكن شهرته العالمية الكبرى ارتبطت باكتشاف مقبرته شبه الكاملة في وادي الملوك سنة 1922 على يد بعثة هوارد كارتر.»</p>
+<div class="time">43–55 ثانية | النهاية</div>
+<p>«لكن هل شهرة توت عنخ آمون بسبب إنجازاته السياسية، ولا بسبب اكتشاف مقبرته؟ شاركونا رأيكم.»</p>
+</div>
+
+<p class="note">
+هذا نموذج أولي يحتاج إلى استكمال البحث والتحقق من التفاصيل قبل النشر.
+ولا ينبغي اختزال تاريخ الملك أو وصفه بأنه لم يترك أثرًا سياسيًا مهمًا.
+</p>
+
+<h3 style="margin-top:25px">شخصيات مقترحة للحلقات</h3>
+<div class="grid three">
+<div class="card"><h3>حتشبسوت</h3><p>الملكة التي حكمت مصر وارتبط عهدها بمشروعات معمارية وتجارية مهمة.</p></div>
+<div class="card"><h3>إخناتون</h3><p>الملك الذي ارتبط بتحول ديني وفني كبير في مصر القديمة.</p></div>
+<div class="card"><h3>كليوباترا السابعة</h3><p>آخر ملوك البطالمة، وعلاقتها بروما والصراع على السلطة.</p></div>
+<div class="card"><h3>رمسيس الثاني</h3><p>الحروب والعمارة والدعاية الملكية في عصره.</p></div>
+<div class="card"><h3>الإسكندر الأكبر</h3><p>رحلته إلى مصر، وتأسيس الإسكندرية، والجدل حول مقبرته.</p></div>
+<div class="card"><h3>صلاح الدين الأيوبي</h3><p>نشأته وصعوده السياسي والعسكري وتحرير القدس.</p></div>
+</div>
+</section>
+
+<section id="research">
+<h2>05 | البحث والتوثيق العلمي</h2>
+<p>
+كل ريل يجب أن يسبقه ملف بحث مستقل. قصر مدة الفيديو لا يعني
+التنازل عن الدقة أو اختصار المعلومة بصورة مضللة.
+</p>
+
+<div class="card">
+<h3>مكونات ملف البحث</h3>
+<ol class="steps">
+<li>السؤال الرئيسي الذي يدور حوله الريل.</li>
+<li>ملخص علمي للموضوع.</li>
+<li>الحقائق المؤكدة والأدلة الداعمة.</li>
+<li>النظريات والآراء المختلف عليها.</li>
+<li>المعلومات التي لا يمكن الجزم بها.</li>
+<li>المراجع والكتب وأرقام الصفحات.</li>
+<li>الأبحاث الأكاديمية والروابط الرسمية.</li>
+<li>النص النهائي بالعامية المصرية.</li>
+<li>مصادر الصور والفيديوهات المستخدمة.</li>
+</ol>
+</div>
+
+<div class="highlight">
+<strong>قاعدة التحرير:</strong>
+نقول «ثبت» عندما يوجد دليل كافٍ، و«يرجح» عندما يكون الترجيح مدعومًا،
+و«توجد نظرية» عندما نتحدث عن فرضية، و«لا نعرف على وجه اليقين»
+عندما لا تسمح الأدلة بالحسم.
+</div>
+
+<h3>أولوية المصادر</h3>
+<ul>
+<li>تقارير الحفائر والبعثات الأثرية.</li>
+<li>الكتب الأكاديمية المتخصصة.</li>
+<li>الأبحاث المنشورة في الدوريات العلمية.</li>
+<li>المتاحف والجامعات والمؤسسات الرسمية.</li>
+<li>المراجع العامة الموثوقة للمعلومات التمهيدية.</li>
+</ul>
+</section>
+
+<section id="production">
+<h2>06 | التصوير والإنتاج</h2>
+
+<div class="grid">
+<div class="card">
+<h3>التصوير بالموبايل</h3>
+<ul>
+<li>الكاميرا الخلفية.</li>
+<li>دقة 1080p.</li>
+<li>30 إطارًا في الثانية.</li>
+<li>تصوير رأسي 9:16.</li>
+<li>تثبيت الهاتف في مستوى العين.</li>
+<li>تنظيف العدسة قبل التصوير.</li>
+</ul>
+</div>
+<div class="card">
+<h3>الصوت والإضاءة</h3>
+<ul>
+<li>مصدر إضاءة أمامي جانبي ناعم.</li>
+<li>تجنب إضاءة الحائط مباشرة.</li>
+<li>اختيار مكان هادئ.</li>
+<li>تقليل الصدى والضوضاء.</li>
+<li>الاهتمام بوضوح الكلام قبل المؤثرات.</li>
+</ul>
+</div>
+</div>
+
+<h3 style="margin-top:25px">تقسيم الريل</h3>
+<div class="card">
+<ol>
+<li>0–5 ثوانٍ: سؤال قوي.</li>
+<li>5–15 ثانية: بناء الفضول.</li>
+<li>15–35 ثانية: الحكاية والمعلومات الأساسية.</li>
+<li>35–48 ثانية: المفاجأة أو أهم معلومة.</li>
+<li>48–60 ثانية: الخلاصة وسؤال الجمهور.</li>
+</ol>
+</div>
+
+<h3 style="margin-top:25px">أسلوب المونتاج</h3>
+<ul>
+<li>تقطيع السكوت والتوقفات غير الضرورية.</li>
+<li>إدخال الصور والخرائط عند ذكر المعلومات المرتبطة بها.</li>
+<li>كتابة الكلمات والأسماء والتواريخ المهمة على الشاشة.</li>
+<li>استخدام حركة بصرية هادئة بدل الانتقالات المبالغ فيها.</li>
+<li>موازنة الموسيقى مع صوت المقدم.</li>
+<li>إضافة المصادر في الوصف أو التعليق المثبت.</li>
+</ul>
+</section>
+
+<section id="software">
+<h2>07 | برامج المونتاج المجانية</h2>
+<p>
+الهدف اختيار أدوات تناسب الإمكانيات الحالية، وتسمح بإنتاج محتوى جيد
+دون الحاجة إلى اشتراكات مرتفعة.
+</p>
+
+<h3 style="margin:25px 0 15px">أولًا: الموبايل</h3>
+<div class="grid">
+<div class="card">
+<span class="tag">سهل للبداية</span>
+<h3>CapCut</h3>
+<p>قص وتركيب، نصوص، ترجمة، مؤثرات، وموسيقى. بعض المزايا مدفوعة أو تختلف حسب البلد.</p>
+<a href="https://www.capcut.com/" target="_blank">الموقع الرسمي</a>
+</div>
+<div class="card">
+<span class="tag">بديل قوي</span>
+<h3>VN Video Editor</h3>
+<p>خط زمني متعدد المسارات، تحكم يدوي، وتركيب الصور والصوت والفيديو.</p>
+<a href="https://www.vlognow.me/" target="_blank">الموقع الرسمي</a>
+</div>
+<div class="card">
+<span class="tag">للتعديلات السريعة</span>
+<h3>YouCut</h3>
+<p>قص ودمج وتغيير أبعاد وإضافة موسيقى ونصوص. قد يتضمن إعلانات ومشتريات.</p>
+<a href="https://play.google.com/store/search?q=YouCut&c=apps" target="_blank">Google Play</a>
+</div>
+<div class="card">
+<span class="tag">سهل للمبتدئ</span>
+<h3>InShot</h3>
+<p>مناسب للفيديو العمودي ومنشورات التواصل، مع بعض القيود في النسخة المجانية.</p>
+<a href="https://inshot.com/" target="_blank">الموقع الرسمي</a>
+</div>
+</div>
+
+<h3 style="margin:30px 0 15px">ثانيًا: الكمبيوتر</h3>
+<div class="grid">
+<div class="card">
+<span class="tag">سهل نسبيًا</span>
+<h3>CapCut Desktop</h3>
+<p>واجهة مناسبة للمحتوى القصير، ونصوص ومؤثرات وخط زمني. بعض الأدوات مدفوعة.</p>
+<a href="https://www.capcut.com/" target="_blank">الموقع الرسمي</a>
+</div>
+<div class="card">
+<span class="tag">مفتوح المصدر</span>
+<h3>Shotcut</h3>
+<p>محرر مجاني متعدد المسارات، يدعم صيغًا كثيرة ويعمل على Windows وMac وLinux.</p>
+<a href="https://shotcut.org/" target="_blank">الموقع الرسمي</a>
+</div>
+<div class="card">
+<span class="tag">احترافي</span>
+<h3>DaVinci Resolve</h3>
+<p>مونتاج وتصحيح ألوان وصوت ومؤثرات. نسخة مجانية قوية، لكنه يحتاج جهازًا مناسبًا.</p>
+<a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank">الموقع الرسمي</a>
+</div>
+<div class="card">
+<span class="tag">مشروع مفتوح المصدر</span>
+<h3>FilmCraft</h3>
+<p>مشروع على GitHub يستهدف تجربة تحرير غير خطية شبيهة ببريمير. ينبغي اختبار مدى نضجه وتوافقه قبل اعتماده في الإنتاج.</p>
+<a href="https://github.com/search?q=FilmCraft&type=repositories" target="_blank">البحث عن المشروع على GitHub</a>
+</div>
+</div>
+
+<h3 style="margin:30px 0 15px">مقارنة مختصرة</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th>البرنامج</th><th>الجهاز</th><th>التكلفة</th><th>السهولة</th><th>أفضل استخدام</th></tr>
+</thead>
+<tbody>
+<tr><td>CapCut</td><td>موبايل وكمبيوتر</td><td>مجاني مع مزايا مدفوعة</td><td>سهل</td><td>ريلز سريعة</td></tr>
+<tr><td>VN</td><td>موبايل</td><td>استخدام مجاني مع اختلاف القيود</td><td>سهل–متوسط</td><td>تركيب يدوي</td></tr>
+<tr><td>YouCut</td><td>موبايل</td><td>مجاني مع إعلانات/مشتريات</td><td>سهل</td><td>تعديلات بسيطة</td></tr>
+<tr><td>InShot</td><td>موبايل</td><td>مجاني مع قيود</td><td>سهل</td><td>محتوى اجتماعي</td></tr>
+<tr><td>Shotcut</td><td>كمبيوتر</td><td>مجاني مفتوح المصدر</td><td>متوسط</td><td>مونتاج متعدد المسارات</td></tr>
+<tr><td>DaVinci Resolve</td><td>كمبيوتر</td><td>نسخة مجانية ومدفوعة</td><td>متقدم</td><td>إنتاج احترافي</td></tr>
+<tr><td>FilmCraft</td><td>كمبيوتر</td><td>مفتوح المصدر</td><td>حسب مرحلة المشروع</td><td>التجربة والمتابعة</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="highlight">
+<strong>الترشيح العملي:</strong>
+CapCut أو VN للموبايل في المرحلة الحالية.
+Shotcut للكمبيوتر المجاني، وDaVinci Resolve عند توفر جهاز قوي.
+أما FilmCraft فيُختبر على مشاريع تجريبية قبل الاعتماد عليه.
+</div>
+</section>
+
+<section id="publishing">
+<h2>08 | خطة النشر والتقييم</h2>
+<h3>معدل النشر المقترح</h3>
+<div class="grid">
+<div class="card">
+<h3>ريل رقم 1</h3>
+<p>حقيقة ولا أسطورة؟</p>
+<p>حلقة تعتمد على سؤال أو رواية منتشرة وتحليل الأدلة.</p>
+</div>
+<div class="card">
+<h3>ريل رقم 2</h3>
+<p>شخصيات صنعت التاريخ</p>
+<p>حكاية شخصية تاريخية وتأثيرها في الأحداث.</p>
+</div>
+</div>
+
+<h3 style="margin-top:25px">دورة العمل الأسبوعية</h3>
+<div class="card">
+<ol>
+<li>اختيار الموضوعين.</li>
+<li>البحث وتجميع المراجع.</li>
+<li>كتابة النصوص ومراجعتها.</li>
+<li>تصوير الحلقات.</li>
+<li>المونتاج والمراجعة النهائية.</li>
+<li>النشر ومتابعة التعليقات.</li>
+<li>تقييم النتائج واختيار موضوعات الأسبوع التالي.</li>
+</ol>
+</div>
+
+<h3 style="margin-top:25px">مؤشرات قياس النجاح</h3>
+<ul>
+<li>الوصول وعدد المشاهدات.</li>
+<li>متوسط مدة المشاهدة.</li>
+<li>نسبة إكمال الفيديو.</li>
+<li>المشاركات والحفظ والتعليقات.</li>
+<li>المتابعون الجدد.</li>
+<li>مدى اهتمام الجمهور بالموضوعات المطروحة.</li>
+</ul>
+
+<div class="highlight">
+<strong>فترة الاختبار:</strong>
+أول ستة أسابيع لاختبار السلسلتين، وتحليل النتائج، وتطوير أسلوب التقديم
+وفقًا لاستجابة جمهور الصفحة.
+</div>
+</section>
+
+<section>
+<h2>09 | المبادئ التي لا نتنازل عنها</h2>
+<div class="card">
+<ol>
+<li>لا معلومة تاريخية بلا مصدر.</li>
+<li>لا نعرض النظرية باعتبارها حقيقة.</li>
+<li>لا نستخدم عنوانًا مضللًا.</li>
+<li>لا نقتبس صورًا أو فيديوهات دون مراعاة حقوق الاستخدام.</li>
+<li>لا نقلد صناع المحتوى الآخرين تقليدًا حرفيًا.</li>
+<li>كل ثانية في الريل يجب أن تضيف معلومة أو تشويقًا.</li>
+<li>المصداقية أهم من المشاهدات المؤقتة.</li>
+</ol>
+</div>
+</section>
+
+</main>
+
 <footer>
-  <div class="privacy">البحث يتم بالكامل داخل المتصفح بعد تحميل بيانات النتيجة من الموقع.</div>
-  <div>نتيجتي © 2026</div>
+DIWAN AL TAREEKH<br>
+مشروع تطوير المحتوى المرئي والريلز التاريخية
 </footer>
 
-<script src="js/app.js"></script>
 </body>
 </html>
